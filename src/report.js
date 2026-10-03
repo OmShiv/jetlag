@@ -92,13 +92,16 @@ export function renderReport({ home, results, command, elapsedMs, verbose, c, co
   return out.join('\n');
 }
 
+// Through npx the jetlag command isn't on the PATH, so suggest npx again.
+const self = () => (process.env.npm_command === 'exec' ? 'npx jetlagged' : 'jetlag');
+
 export function debugCommand(dest, cmd) {
-  if (dest.id !== 'custom') return `jetlag exec ${dest.id} -- ${cmd}`;
+  if (dest.id !== 'custom') return `${self()} exec ${dest.id} -- ${cmd}`;
   const flags = [];
   if (dest.tz) flags.push(`--tz ${dest.tz}`);
   if (dest.atText) flags.push(`--at ${dest.atText}`);
   if (dest.locale) flags.push(`--locale ${dest.locale}`);
-  return `jetlag exec ${flags.join(' ')} -- ${cmd}`;
+  return `${self()} exec ${flags.join(' ')} -- ${cmd}`;
 }
 
 export function jsonReport({ home, results, command, elapsedMs }) {

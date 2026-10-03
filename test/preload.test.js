@@ -13,7 +13,7 @@ function clockEnv(extra = {}) {
   const marker = join(mkdtempSync(join(tmpdir(), 'jetlag-test-')), 'marker');
   return {
     marker,
-    env: { ...process.env, JETLAG_NOW: TARGET, JETLAG_EPOCH: String(Date.now()), JETLAG_MARKER: marker, TZ: 'UTC', ...extra },
+    env: { ...process.env, JETLAG_NOW: TARGET, JETLAG_EPOCH: String(Date.now()), JETLAG_MARKER: marker, TZ: 'UTC', PYTHONDONTWRITEBYTECODE: '1', ...extra },
   };
 }
 

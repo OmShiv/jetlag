@@ -1,5 +1,5 @@
 // A small billing module. Every function here passes its tests on the laptop
-// it was written on. Run `npx github:OmShiv/jetlag npm test` to see where they don't.
+// it was written on. Run `npx jetlagged npm test` to see where they don't.
 
 export function isDueToday(invoice, now = new Date()) {
   return invoice.dueDate === now.toISOString().slice(0, 10);

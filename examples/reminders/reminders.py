@@ -1,6 +1,6 @@
 """Reminder helpers that pass their tests on the machine they were written on.
 
-Run `npx github:OmShiv/jetlag python3 -m unittest` in this folder to see where they don't.
+Run `npx jetlagged python3 -m unittest` in this folder to see where they don't.
 """
 
 from datetime import date, datetime, timezone
