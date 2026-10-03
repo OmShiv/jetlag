@@ -54,7 +54,7 @@ npm install --global github:OmShiv/jetlag
 npm install --save-dev github:OmShiv/jetlag
 ```
 
-jetlag needs Node.js 18.14 or later to run. The tests it runs can be in any language.
+jetlag needs Node.js 20 or later to run. The tests it runs can be in any language.
 
 ## Usage
 
