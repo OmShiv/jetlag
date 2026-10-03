@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [20, 22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+
+  examples:
+    name: Examples find their bugs
+    runs-on: ubuntu-latest
+    env:
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Billing (node:test)
+        working-directory: examples/billing
+        run: |
+          set +e
+          node ../../bin/jetlag.js --json -- npm test > report.json
+          code=$?
+          set -e
+          test "$code" -eq 1
+          node -e '
+            const r = require("./report.json");
+            // On some days a bug also fails at home (month-end on the 31st), and
+            // jetlag reports "same" instead of "fail". Both mean it was found.
+            const found = r.destinations.filter((d) => d.status === "fail" || d.status === "same").map((d) => d.id);
+            console.log("found in:", found.join(", "));
+            for (const id of ["los-angeles-night", "kathmandu", "spring-forward", "leap-day", "month-end", "german", "thai"]) {
+              if (!found.includes(id)) throw new Error(`expected ${id} to break a test`);
+            }
+          '
+      - name: Reminders (Python unittest)
+        working-directory: examples/reminders
+        run: |
+          set +e
+          node ../../bin/jetlag.js --json --only leap-day,kathmandu,year-2100,utc -- python3 -m unittest > report.json
+          code=$?
+          set -e
+          test "$code" -eq 1
+          node -e '
+            const r = require("./report.json");
+            const status = Object.fromEntries(r.destinations.map((d) => [d.id, d.status]));
+            console.log(status);
+            for (const id of ["leap-day", "kathmandu", "year-2100"]) {
+              if (!["fail", "same"].includes(status[id])) throw new Error(`expected ${id} to break a test`);
+            }
+            if (!["pass", "same"].includes(status.utc)) throw new Error("utc should not add failures");
+          '
