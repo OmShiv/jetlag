@@ -1,0 +1,41 @@
+{
+  "name": "@omshiv/jetlag",
+  "version": "0.1.0",
+  "description": "Run your tests in other time zones, on tricky dates, and in other languages. Finds the date bugs your laptop hides.",
+  "type": "module",
+  "bin": {
+    "jetlag": "bin/jetlag.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "preload"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=18.14"
+  },
+  "keywords": [
+    "testing",
+    "timezone",
+    "time-zone",
+    "dst",
+    "daylight-saving",
+    "locale",
+    "i18n",
+    "leap-year",
+    "y2038",
+    "date",
+    "cli"
+  ],
+  "author": "OmShiv",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmShiv/jetlag.git"
+  },
+  "homepage": "https://github.com/OmShiv/jetlag#readme",
+  "bugs": "https://github.com/OmShiv/jetlag/issues"
+}
